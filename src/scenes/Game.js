@@ -23,8 +23,8 @@ export default new Phaser.Class({
     this.load.image('mountainFGTrees', mountainFGTrees);
 
     this.load.image('log', log);
+    this.load.image('gem', gem);
     this.load.spritesheet('flippie', flippie, { frameWidth: 32, frameHeight: 32, endFrame: 3 })
-
   },
   create: function create() {
     this.addBackground()
@@ -38,12 +38,18 @@ export default new Phaser.Class({
         this.placeLogs(false);
     }
     this.logGroup.setVelocityX(-gameOptions.birdSpeed);
+
+    this.gemGroup = this.physics.add.group()
+    this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
+
     this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'flippie').play('fly');
     this.bird.angle = gameOptions.birdAngle
     this.bird.body.allowRotation = true
     this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
     this.bird.body.gravity.y = gameOptions.birdGravity
     this.bird.scale = gameOptions.birdScale
+    this.physics.add.overlap(this.bird, this.gemGroup, this.collectGem, this.flipGravity, this)
+
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
     this.topScore = localStorage.getItem(gameOptions.localStorageName) == null ? 0 : localStorage.getItem(gameOptions.localStorageName);
@@ -63,9 +69,16 @@ export default new Phaser.Class({
             this.logPool.push(log);
             if(this.logPool.length == 2){
                 this.placeLogs(true);
+                this.placeGem()
             }
         }
     }, this)
+  },
+  collectGem: function(bird, gem) {
+    gem.disableBody(true, true)
+  },
+  flipGravity: function() {
+    console.log("Flippity flip")
   },
   loadFlippie: function(){
     this.anims.create({
@@ -152,6 +165,18 @@ export default new Phaser.Class({
       if(addScore){
           this.updateScore(1);
       }
+  },
+  placeGem: function(){
+    let rightmostLog = this.getRightmostLog();
+    let gem = this.gemGroup.create(0, 0, 'gem')
+    this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
+    gem.x = rightmostLog + 80
+    gem.y = Phaser.Math.Between(gameOptions.logHole[0], gameOptions.logHole[1]);
+    gem.width = 20
+    gem.displayWidth = gem.width
+    gem.scaleY = gem.scaleX
+    console.log(`gem height: ${gem.height}`)
+    console.log(`gem placed: ${gem.x}, ${gem.y}`)
   },
   flap: function(){
       this.bird.body.velocity.y = -gameOptions.birdFlapPower;

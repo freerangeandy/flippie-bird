@@ -6,6 +6,7 @@ export const gameOptions = {
   birdGravity: 800,
   // horizontal bird speed
   birdSpeed: 125,
+  birdAngle: 25,
   // flap thrust
   birdFlapPower: 300,
   // minimum pipe height, in pixels. Affects hole position

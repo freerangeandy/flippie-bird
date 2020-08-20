@@ -38,7 +38,9 @@ export default new Phaser.Class({
     }
     this.pipeGroup.setVelocityX(-gameOptions.birdSpeed);
     this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'flippie').play('fly');
-    this.bird.angle = 35
+    this.bird.angle = gameOptions.birdAngle
+    this.bird.body.allowRotation = true
+    this.bird.body.angularVelocity = 40
     this.bird.body.gravity.y = gameOptions.birdGravity;
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
@@ -50,7 +52,7 @@ export default new Phaser.Class({
     this.anims.create({
       key: 'fly',
       frames: this.anims.generateFrameNumbers('flippie', { start: 1, end: 1, first: 1}),
-      frameRate: 15,
+      frameRate: 25,
       repeat: -1
     })
     this.anims.create({
@@ -133,6 +135,7 @@ export default new Phaser.Class({
   flap: function(){
       this.bird.body.velocity.y = -gameOptions.birdFlapPower;
       this.bird.anims.play('flap', true)
+      this.bird.angle = gameOptions.birdAngle
   },
   getRightmostPipe: function (){
       let rightmostPipe = 0;

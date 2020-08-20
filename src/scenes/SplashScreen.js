@@ -27,14 +27,20 @@ export default new Phaser.Class({
 
     const titleConfig = {
       fontFamily: 'Palatino, serif',
-      fontSize: '36px',
+      fontSize: '48px',
       color: '#28a4f7',
       stroke: '#fff7e2',
       strokeThickness: '2'
     }
+
+    const instructionsConfig = {
+      fontFamily: 'Verdana, sans-serif',
+      color: '#fff7e2',
+    }
+
     this.add.text(20, 20, 'Flippie Bird', titleConfig)
-    this.add.text(gameOptions.gameWidth - 290, gameOptions.gameHeight / 2, "Press space to start.")
-    this.add.text(gameOptions.gameWidth - 290, gameOptions.gameHeight / 2 + 15, "Click mouse button to flap.")
+    this.add.text(20, gameOptions.gameHeight / 2 + 20, "Press space to begin", instructionsConfig)
+    this.add.text(20, gameOptions.gameHeight / 2 + 40, "Click mouse button to flap", instructionsConfig)
   },
   update: function () {
     this.backgroundParallax()

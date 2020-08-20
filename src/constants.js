@@ -1,7 +1,7 @@
 
 export const gameOptions = {
-  gameHeight: 480,
-  gameWidth: 320,
+  gameHeight: 320,
+  gameWidth: 540,
   // bird gravity, will make bird fall if you don't flap
   birdGravity: 800,
   // horizontal bird speed

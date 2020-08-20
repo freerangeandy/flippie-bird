@@ -1,12 +1,12 @@
 import Phaser from "phaser";
 import { gameOptions } from "../constants"
-import pipe from "../assets/pipe.png"
 import mountainBG from "../assets/parallax-mountain-bg.png"
 import mountainFar from "../assets/parallax-mountain-montain-far.png"
 import mountains from "../assets/parallax-mountain-mountains.png"
 import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippie from "../assets/flyingbird.png"
+import log from "../assets/one-log.png"
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -21,7 +21,7 @@ export default new Phaser.Class({
     this.load.image('mountainTrees', mountainTrees);
     this.load.image('mountainFGTrees', mountainFGTrees);
 
-    this.load.image('pipe', pipe);
+    this.load.image('log', log);
     this.load.spritesheet('flippie', flippie, { frameWidth: 32, frameHeight: 32, endFrame: 3 })
 
   },
@@ -29,26 +29,43 @@ export default new Phaser.Class({
     this.addBackground()
     this.loadFlippie()
 
-    this.pipeGroup = this.physics.add.group();
-    this.pipePool = [];
+    this.logGroup = this.physics.add.group();
+    this.logPool = [];
     for(let i = 0; i < 4; i++){
-        this.pipePool.push(this.pipeGroup.create(0, 0, 'pipe'));
-        this.pipePool.push(this.pipeGroup.create(0, 0, 'pipe'));
-        this.placePipes(false);
+        this.logPool.push(this.logGroup.create(0, 0, 'log'));
+        this.logPool.push(this.logGroup.create(0, 0, 'log'));
+        this.placeLogs(false);
     }
-    this.pipeGroup.setVelocityX(-gameOptions.birdSpeed);
+    this.logGroup.setVelocityX(-gameOptions.birdSpeed);
     this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'flippie').play('fly');
     this.bird.angle = gameOptions.birdAngle
     this.bird.body.allowRotation = true
-    this.bird.body.angularVelocity = 40
+    this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
     this.bird.body.gravity.y = gameOptions.birdGravity
-    this.bird.scale = 1.5
+    this.bird.scale = gameOptions.birdScale
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
     this.topScore = localStorage.getItem(gameOptions.localStorageName) == null ? 0 : localStorage.getItem(gameOptions.localStorageName);
     this.scoreText = this.add.text(10, 10, '');
     this.updateScore(this.score);
   },
+  update: function () {
+    this.backgroundParallax()
+    this.physics.world.collide(this.bird, this.logGroup, function(){
+        this.die();
+    }, null, this);
+    if(this.bird.y > gameOptions.gameHeight || this.bird.y < 0){
+        this.die();
+    }
+    this.logGroup.getChildren().forEach(function(log){
+        if(log.getBounds().right < 0){
+            this.logPool.push(log);
+            if(this.logPool.length == 2){
+                this.placeLogs(true);
+            }
+        }
+    }, this)
+  },  
   loadFlippie: function(){
     this.anims.create({
       key: 'fly',
@@ -118,17 +135,18 @@ export default new Phaser.Class({
       this.score += inc;
       this.scoreText.text = 'Score: ' + this.score + '\nBest: ' + this.topScore;
   },
-  placePipes: function(addScore){
-      let rightmost = this.getRightmostPipe();
-      let pipeHoleHeight = Phaser.Math.Between(gameOptions.pipeHole[0], gameOptions.pipeHole[1]);
-      let pipeHolePosition = Phaser.Math.Between(gameOptions.minPipeHeight + pipeHoleHeight / 2, gameOptions.gameHeight- gameOptions.minPipeHeight - pipeHoleHeight / 2);
-      this.pipePool[0].x = rightmost + this.pipePool[0].getBounds().width + Phaser.Math.Between(gameOptions.pipeDistance[0], gameOptions.pipeDistance[1]);
-      this.pipePool[0].y = pipeHolePosition - pipeHoleHeight / 2;
-      this.pipePool[0].setOrigin(0, 1);
-      this.pipePool[1].x = this.pipePool[0].x;
-      this.pipePool[1].y = pipeHolePosition + pipeHoleHeight / 2;
-      this.pipePool[1].setOrigin(0, 0);
-      this.pipePool = [];
+  placeLogs: function(addScore){
+      let rightmost = this.getRightmostLog();
+      let logHoleHeight = Phaser.Math.Between(gameOptions.logHole[0], gameOptions.logHole[1]);
+      let logHolePosition = Phaser.Math.Between(gameOptions.minLogHeight + logHoleHeight / 2, gameOptions.gameHeight- gameOptions.minLogHeight - logHoleHeight / 2);
+      this.logPool[0].x = rightmost + this.logPool[0].getBounds().width + Phaser.Math.Between(gameOptions.logDistance[0], gameOptions.logDistance[1]);
+      this.logPool[0].y = logHolePosition - logHoleHeight / 2;
+      this.logPool[0].setOrigin(0, 1);
+      this.logPool[1].x = this.logPool[0].x;
+      this.logPool[1].y = logHolePosition + logHoleHeight / 2;
+      this.logPool[1].setOrigin(0, 0);
+      this.logPool[1].setSize(this.logPool[0].width, this.logPool[0].height - 20)
+      this.logPool = [];
       if(addScore){
           this.updateScore(1);
       }
@@ -138,12 +156,12 @@ export default new Phaser.Class({
       this.bird.anims.play('flap', true)
       this.bird.angle = gameOptions.birdAngle
   },
-  getRightmostPipe: function (){
-      let rightmostPipe = 0;
-      this.pipeGroup.getChildren().forEach(function(pipe){
-          rightmostPipe = Math.max(rightmostPipe, pipe.x);
+  getRightmostLog: function (){
+      let rightmostLog = 0;
+      this.logGroup.getChildren().forEach(function(log){
+          rightmostLog = Math.max(rightmostLog, log.x);
       });
-      return rightmostPipe;
+      return rightmostLog;
   },
   backgroundParallax: function() {
     this.mountainsBack.tilePositionX += 0.05
@@ -151,23 +169,6 @@ export default new Phaser.Class({
     this.mountainsMid2.tilePositionX += 0.25
     this.mountainsMid1.tilePositionX += 0.35
     this.mountainsFront.tilePositionX += 0.75
-  },
-  update: function () {
-    this.backgroundParallax()
-    this.physics.world.collide(this.bird, this.pipeGroup, function(){
-        this.die();
-    }, null, this);
-    if(this.bird.y > gameOptions.gameHeight || this.bird.y < 0){
-        this.die();
-    }
-    this.pipeGroup.getChildren().forEach(function(pipe){
-        if(pipe.getBounds().right < 0){
-            this.pipePool.push(pipe);
-            if(this.pipePool.length == 2){
-                this.placePipes(true);
-            }
-        }
-    }, this)
   },
   die: function(){
       localStorage.setItem(gameOptions.localStorageName, Math.max(this.score, this.topScore));

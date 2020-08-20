@@ -6,7 +6,7 @@ import { gameOptions } from "./constants"
 
 var config = {
   type: Phaser.AUTO,
-  backgroundColor:0x87ceeb,
+  backgroundColor:0xab6a8c,
   scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,

@@ -7,6 +7,7 @@ import mountainFar from "../assets/parallax-mountain-montain-far.png"
 import mountains from "../assets/parallax-mountain-mountains.png"
 import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
+import flippie from "../assets/flyingbird.png"
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -23,9 +24,12 @@ export default new Phaser.Class({
 
     this.load.image('bird', bird);
     this.load.image('pipe', pipe);
+    this.load.spritesheet('flippie', flippie, { frameWidth: 32, frameHeight: 32, endFrame: 3 })
+
   },
   create: function create() {
     this.addBackground()
+    this.loadFlippie()
 
     this.pipeGroup = this.physics.add.group();
     this.pipePool = [];
@@ -35,13 +39,28 @@ export default new Phaser.Class({
         this.placePipes(false);
     }
     this.pipeGroup.setVelocityX(-gameOptions.birdSpeed);
-    this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'bird');
+    this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'flippie').play('fly');
+    this.bird.angle = 35
     this.bird.body.gravity.y = gameOptions.birdGravity;
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
     this.topScore = localStorage.getItem(gameOptions.localStorageName) == null ? 0 : localStorage.getItem(gameOptions.localStorageName);
     this.scoreText = this.add.text(10, 10, '');
     this.updateScore(this.score);
+  },
+  loadFlippie: function(){
+    this.anims.create({
+      key: 'fly',
+      frames: this.anims.generateFrameNumbers('flippie', { start: 1, end: 1, first: 1}),
+      frameRate: 15,
+      repeat: -1
+    })
+    this.anims.create({
+      key: 'flap',
+      frames: this.anims.generateFrameNumbers('flippie', { start: 0, end: 3, first: 0}),
+      frameRate: 15,
+      repeat: 15
+    })
   },
   addBackground: function(){
     this.mountainsBack = this.add.tileSprite(

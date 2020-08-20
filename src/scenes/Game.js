@@ -65,7 +65,7 @@ export default new Phaser.Class({
             }
         }
     }, this)
-  },  
+  },
   loadFlippie: function(){
     this.anims.create({
       key: 'fly',
@@ -145,7 +145,8 @@ export default new Phaser.Class({
       this.logPool[1].x = this.logPool[0].x;
       this.logPool[1].y = logHolePosition + logHoleHeight / 2;
       this.logPool[1].setOrigin(0, 0);
-      this.logPool[1].setSize(this.logPool[0].width, this.logPool[0].height - 20)
+      this.logPool[0].setSize(this.logPool[0].width - 35, this.logPool[0].height)
+      this.logPool[1].setSize(this.logPool[1].width - 35, this.logPool[1].height - 35)
       this.logPool = [];
       if(addScore){
           this.updateScore(1);

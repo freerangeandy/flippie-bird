@@ -1,12 +1,12 @@
 import Phaser from "phaser";
 import Game from "./scenes/Game";
-import MainMenu from "./scenes/MainMenu";
+import SplashScreen from "./scenes/SplashScreen";
 import WinScreen from "./scenes/WinScreen";
 import { gameOptions } from "./constants"
 
 var config = {
   type: Phaser.AUTO,
-  backgroundColor:0x87ceeb,
+  backgroundColor:0xab6a8c,
   scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -22,7 +22,7 @@ var config = {
           }
       }
   },
-  scene: [MainMenu, Game, WinScreen]
+  scene: [SplashScreen, Game, WinScreen]
 };
 
 var game = new Phaser.Game(config);

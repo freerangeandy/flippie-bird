@@ -16,7 +16,7 @@ export const gameOptions = {
   // distance range from next log, in pixels
   logDistance: [220, 280],
   // hole range between logs, in pixels
-  logHole: [100, 130],
+  logHole: [110, 150],
   // local storage object name
   localStorageName: 'bestFlappyScore'
 }

@@ -49,6 +49,23 @@ export default new Phaser.Class({
     this.scoreText = this.add.text(10, 10, '');
     this.updateScore(this.score);
   },
+  update: function () {
+    this.backgroundParallax()
+    this.physics.world.collide(this.bird, this.logGroup, function(){
+        this.die();
+    }, null, this);
+    if(this.bird.y > gameOptions.gameHeight || this.bird.y < 0){
+        this.die();
+    }
+    this.logGroup.getChildren().forEach(function(log){
+        if(log.getBounds().right < 0){
+            this.logPool.push(log);
+            if(this.logPool.length == 2){
+                this.placeLogs(true);
+            }
+        }
+    }, this)
+  },  
   loadFlippie: function(){
     this.anims.create({
       key: 'fly',
@@ -128,7 +145,7 @@ export default new Phaser.Class({
       this.logPool[1].x = this.logPool[0].x;
       this.logPool[1].y = logHolePosition + logHoleHeight / 2;
       this.logPool[1].setOrigin(0, 0);
-      this.logPool[1].setSize(this.logPool[0].width, this.logPool[0].height - 20 )
+      this.logPool[1].setSize(this.logPool[0].width, this.logPool[0].height - 20)
       this.logPool = [];
       if(addScore){
           this.updateScore(1);
@@ -152,23 +169,6 @@ export default new Phaser.Class({
     this.mountainsMid2.tilePositionX += 0.25
     this.mountainsMid1.tilePositionX += 0.35
     this.mountainsFront.tilePositionX += 0.75
-  },
-  update: function () {
-    this.backgroundParallax()
-    this.physics.world.collide(this.bird, this.logGroup, function(){
-        this.die();
-    }, null, this);
-    if(this.bird.y > gameOptions.gameHeight || this.bird.y < 0){
-        this.die();
-    }
-    this.logGroup.getChildren().forEach(function(log){
-        if(log.getBounds().right < 0){
-            this.logPool.push(log);
-            if(this.logPool.length == 2){
-                this.placeLogs(true);
-            }
-        }
-    }, this)
   },
   die: function(){
       localStorage.setItem(gameOptions.localStorageName, Math.max(this.score, this.topScore));

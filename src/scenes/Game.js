@@ -25,6 +25,25 @@ export default new Phaser.Class({
     this.load.image('pipe', pipe);
   },
   create: function create() {
+    this.addBackground()
+
+    this.pipeGroup = this.physics.add.group();
+    this.pipePool = [];
+    for(let i = 0; i < 4; i++){
+        this.pipePool.push(this.pipeGroup.create(0, 0, 'pipe'));
+        this.pipePool.push(this.pipeGroup.create(0, 0, 'pipe'));
+        this.placePipes(false);
+    }
+    this.pipeGroup.setVelocityX(-gameOptions.birdSpeed);
+    this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'bird');
+    this.bird.body.gravity.y = gameOptions.birdGravity;
+    this.input.on('pointerdown', this.flap, this);
+    this.score = 0;
+    this.topScore = localStorage.getItem(gameOptions.localStorageName) == null ? 0 : localStorage.getItem(gameOptions.localStorageName);
+    this.scoreText = this.add.text(10, 10, '');
+    this.updateScore(this.score);
+  },
+  addBackground: function(){
     this.mountainsBack = this.add.tileSprite(
       gameOptions.gameWidth/2,
       gameOptions.gameHeight/2,
@@ -74,22 +93,6 @@ export default new Phaser.Class({
     )
     this.mountainsFront.tileScaleX=2
     this.mountainsFront.tileScaleY=2
-
-    this.pipeGroup = this.physics.add.group();
-    this.pipePool = [];
-    for(let i = 0; i < 4; i++){
-        this.pipePool.push(this.pipeGroup.create(0, 0, 'pipe'));
-        this.pipePool.push(this.pipeGroup.create(0, 0, 'pipe'));
-        this.placePipes(false);
-    }
-    this.pipeGroup.setVelocityX(-gameOptions.birdSpeed);
-    this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'bird');
-    this.bird.body.gravity.y = gameOptions.birdGravity;
-    this.input.on('pointerdown', this.flap, this);
-    this.score = 0;
-    this.topScore = localStorage.getItem(gameOptions.localStorageName) == null ? 0 : localStorage.getItem(gameOptions.localStorageName);
-    this.scoreText = this.add.text(10, 10, '');
-    this.updateScore(this.score);
   },
   updateScore: function(inc){
       this.score += inc;
@@ -120,7 +123,15 @@ export default new Phaser.Class({
       });
       return rightmostPipe;
   },
+  backgroundParallax: function() {
+    this.mountainsBack.tilePositionX += 0.05
+    this.mountainsMid3.tilePositionX += 0.15
+    this.mountainsMid2.tilePositionX += 0.25
+    this.mountainsMid1.tilePositionX += 0.35
+    this.mountainsFront.tilePositionX += 0.75
+  },
   update: function () {
+    this.backgroundParallax()
     this.physics.world.collide(this.bird, this.pipeGroup, function(){
         this.die();
     }, null, this);

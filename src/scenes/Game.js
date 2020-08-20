@@ -7,6 +7,7 @@ import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
+import gem from "../assets/gem-type3-red.png"
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,

@@ -1,12 +1,12 @@
 import Phaser from "phaser";
 import { gameOptions } from "../constants"
-import bird from "../assets/bird.png"
 import pipe from "../assets/pipe.png"
 import mountainBG from "../assets/parallax-mountain-bg.png"
 import mountainFar from "../assets/parallax-mountain-montain-far.png"
 import mountains from "../assets/parallax-mountain-mountains.png"
 import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
+import flippie from "../assets/flyingbird.png"
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -21,11 +21,13 @@ export default new Phaser.Class({
     this.load.image('mountainTrees', mountainTrees);
     this.load.image('mountainFGTrees', mountainFGTrees);
 
-    this.load.image('bird', bird);
     this.load.image('pipe', pipe);
+    this.load.spritesheet('flippie', flippie, { frameWidth: 32, frameHeight: 32, endFrame: 3 })
+
   },
   create: function create() {
     this.addBackground()
+    this.loadFlippie()
 
     this.pipeGroup = this.physics.add.group();
     this.pipePool = [];
@@ -35,13 +37,31 @@ export default new Phaser.Class({
         this.placePipes(false);
     }
     this.pipeGroup.setVelocityX(-gameOptions.birdSpeed);
-    this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'bird');
-    this.bird.body.gravity.y = gameOptions.birdGravity;
+    this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'flippie').play('fly');
+    this.bird.angle = gameOptions.birdAngle
+    this.bird.body.allowRotation = true
+    this.bird.body.angularVelocity = 40
+    this.bird.body.gravity.y = gameOptions.birdGravity
+    this.bird.scale = 1.5
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
     this.topScore = localStorage.getItem(gameOptions.localStorageName) == null ? 0 : localStorage.getItem(gameOptions.localStorageName);
     this.scoreText = this.add.text(10, 10, '');
     this.updateScore(this.score);
+  },
+  loadFlippie: function(){
+    this.anims.create({
+      key: 'fly',
+      frames: this.anims.generateFrameNumbers('flippie', { start: 1, end: 1, first: 1}),
+      frameRate: 25,
+      repeat: -1
+    })
+    this.anims.create({
+      key: 'flap',
+      frames: this.anims.generateFrameNumbers('flippie', { frames: [1,2,3,0,1] }),
+      frameRate: 25,
+      repeat: 0
+    })
   },
   addBackground: function(){
     this.mountainsBack = this.add.tileSprite(
@@ -115,6 +135,8 @@ export default new Phaser.Class({
   },
   flap: function(){
       this.bird.body.velocity.y = -gameOptions.birdFlapPower;
+      this.bird.anims.play('flap', true)
+      this.bird.angle = gameOptions.birdAngle
   },
   getRightmostPipe: function (){
       let rightmostPipe = 0;

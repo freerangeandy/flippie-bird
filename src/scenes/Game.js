@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import { gameOptions } from "../constants"
-import bird from "../assets/bird.png"
 import pipe from "../assets/pipe.png"
 import mountainBG from "../assets/parallax-mountain-bg.png"
 import mountainFar from "../assets/parallax-mountain-montain-far.png"
@@ -22,7 +21,6 @@ export default new Phaser.Class({
     this.load.image('mountainTrees', mountainTrees);
     this.load.image('mountainFGTrees', mountainFGTrees);
 
-    this.load.image('bird', bird);
     this.load.image('pipe', pipe);
     this.load.spritesheet('flippie', flippie, { frameWidth: 32, frameHeight: 32, endFrame: 3 })
 

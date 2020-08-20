@@ -2,6 +2,11 @@ import Phaser from "phaser";
 import { gameOptions } from "../constants"
 import bird from "../assets/bird.png"
 import pipe from "../assets/pipe.png"
+import mountainBG from "../assets/parallax-mountain-bg.png"
+import mountainFar from "../assets/parallax-mountain-montain-far.png"
+import mountains from "../assets/parallax-mountain-mountains.png"
+import mountainTrees from "../assets/parallax-mountain-trees.png"
+import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -10,10 +15,66 @@ export default new Phaser.Class({
     window.GAME = this;
   },
   preload: function preload() {
+    this.load.image('mountainBG', mountainBG);
+    this.load.image('mountainFar', mountainFar);
+    this.load.image('mountains', mountains);
+    this.load.image('mountainTrees', mountainTrees);
+    this.load.image('mountainFGTrees', mountainFGTrees);
+
     this.load.image('bird', bird);
     this.load.image('pipe', pipe);
   },
   create: function create() {
+    this.mountainsBack = this.add.tileSprite(
+      gameOptions.gameWidth/2,
+      gameOptions.gameHeight/2,
+      gameOptions.gameWidth,
+      gameOptions.gameHeight,
+      'mountainBG'
+    )
+    this.mountainsBack.tileScaleX=2
+    this.mountainsBack.tileScaleY=2
+
+    this.mountainsMid3 = this.add.tileSprite(
+      gameOptions.gameWidth/2,
+      gameOptions.gameHeight/2,
+      gameOptions.gameWidth,
+      gameOptions.gameHeight,
+      'mountainFar'
+    )
+    this.mountainsMid3.tileScaleX=2
+    this.mountainsMid3.tileScaleY=2
+
+    this.mountainsMid2 = this.add.tileSprite(
+      gameOptions.gameWidth/2,
+      gameOptions.gameHeight/2,
+      gameOptions.gameWidth,
+      gameOptions.gameHeight,
+      'mountains'
+    )
+    this.mountainsMid2.tileScaleX=2
+    this.mountainsMid2.tileScaleY=2
+
+    this.mountainsMid1 = this.add.tileSprite(
+      gameOptions.gameWidth/2,
+      gameOptions.gameHeight/2,
+      gameOptions.gameWidth,
+      gameOptions.gameHeight,
+      'mountainTrees'
+    )
+    this.mountainsMid1.tileScaleX=2
+    this.mountainsMid1.tileScaleY=2
+
+    this.mountainsFront = this.add.tileSprite(
+      gameOptions.gameWidth/2,
+      gameOptions.gameHeight/2,
+      gameOptions.gameWidth,
+      gameOptions.gameHeight,
+      'mountainFGTrees'
+    )
+    this.mountainsFront.tileScaleX=2
+    this.mountainsFront.tileScaleY=2
+
     this.pipeGroup = this.physics.add.group();
     this.pipePool = [];
     for(let i = 0; i < 4; i++){

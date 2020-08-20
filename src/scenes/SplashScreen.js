@@ -7,7 +7,7 @@ let cursors;
 export default new Phaser.Class({
   Extends: Phaser.Scene,
   initialize: function () {
-    Phaser.Scene.call(this, { key: 'mainmenu' });
+    Phaser.Scene.call(this, { key: 'splashscreen' });
   },
   create: function() {
     cursors = this.input.keyboard.createCursorKeys();

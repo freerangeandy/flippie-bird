@@ -41,6 +41,7 @@ export default new Phaser.Class({
 
     this.gemGroup = this.physics.add.group()
     this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
+    this.placeGem()
 
     this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'flippie').play('fly');
     this.bird.angle = gameOptions.birdAngle
@@ -69,10 +70,16 @@ export default new Phaser.Class({
             this.logPool.push(log);
             if(this.logPool.length == 2){
                 this.placeLogs(true);
-                this.placeGem()
+                if (this.getRandomNum(3)){
+                  this.placeGem()
+                }
             }
         }
     }, this)
+  },
+  getRandomNum: function(sampleSize) {
+    let value = Phaser.Math.Between(0, sampleSize)
+    return value <= 1
   },
   collectGem: function(bird, gem) {
     gem.disableBody(true, true)

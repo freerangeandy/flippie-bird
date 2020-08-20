@@ -9,12 +9,12 @@ export const gameOptions = {
   birdAngle: 25,
   // flap thrust
   birdFlapPower: 300,
-  // minimum pipe height, in pixels. Affects hole position
-  minPipeHeight: 50,
-  // distance range from next pipe, in pixels
-  pipeDistance: [220, 280],
-  // hole range between pipes, in pixels
-  pipeHole: [100, 130],
+  // minimum log height, in pixels. Affects hole position
+  minLogHeight: 50,
+  // distance range from next log, in pixels
+  logDistance: [220, 280],
+  // hole range between logs, in pixels
+  logHole: [100, 130],
   // local storage object name
   localStorageName: 'bestFlappyScore'
 }

@@ -55,9 +55,9 @@ export default new Phaser.Class({
     })
     this.anims.create({
       key: 'flap',
-      frames: this.anims.generateFrameNumbers('flippie', { start: 0, end: 3, first: 0}),
-      frameRate: 15,
-      repeat: 15
+      frames: this.anims.generateFrameNumbers('flippie', { frames: [1,2,3,0,1] }),
+      frameRate: 25,
+      repeat: 0
     })
   },
   addBackground: function(){
@@ -132,6 +132,7 @@ export default new Phaser.Class({
   },
   flap: function(){
       this.bird.body.velocity.y = -gameOptions.birdFlapPower;
+      this.bird.anims.play('flap', true)
   },
   getRightmostPipe: function (){
       let rightmostPipe = 0;

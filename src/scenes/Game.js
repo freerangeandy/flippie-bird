@@ -41,7 +41,8 @@ export default new Phaser.Class({
     this.bird.angle = gameOptions.birdAngle
     this.bird.body.allowRotation = true
     this.bird.body.angularVelocity = 40
-    this.bird.body.gravity.y = gameOptions.birdGravity;
+    this.bird.body.gravity.y = gameOptions.birdGravity
+    this.bird.scale = 1.5
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
     this.topScore = localStorage.getItem(gameOptions.localStorageName) == null ? 0 : localStorage.getItem(gameOptions.localStorageName);

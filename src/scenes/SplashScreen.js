@@ -25,10 +25,14 @@ export default new Phaser.Class({
     this.addBackground()
     cursors = this.input.keyboard.createCursorKeys();
 
-    // graphics = this.add.graphics();
-    // graphics.fillStyle(0x000000, 1);
-    // graphics.fillRect(0, 0, gameOptions.gameWidth, gameOptions.gameHeight);
-
+    const titleConfig = {
+      fontFamily: 'Palatino, serif',
+      fontSize: '36px',
+      color: '#28a4f7',
+      stroke: '#fff7e2',
+      strokeThickness: '2'
+    }
+    this.add.text(20, 20, 'Flippie Bird', titleConfig)
     this.add.text(gameOptions.gameWidth - 290, gameOptions.gameHeight / 2, "Press space to start.")
     this.add.text(gameOptions.gameWidth - 290, gameOptions.gameHeight / 2 + 15, "Click mouse button to flap.")
   },

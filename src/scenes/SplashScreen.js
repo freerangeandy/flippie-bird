@@ -41,6 +41,7 @@ export default new Phaser.Class({
     this.add.text(20, 20, 'Flippie Bird', titleConfig)
     this.add.text(20, gameOptions.gameHeight / 2 + 20, "Press space to begin", instructionsConfig)
     this.add.text(20, gameOptions.gameHeight / 2 + 40, "Click mouse button to flap", instructionsConfig)
+    this.add.text(20, gameOptions.gameHeight / 2 + 60, "Collect red gem to flip...", instructionsConfig)
   },
   update: function () {
     this.backgroundParallax()

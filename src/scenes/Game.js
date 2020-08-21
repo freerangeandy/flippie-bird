@@ -69,7 +69,7 @@ export default new Phaser.Class({
     this.physics.world.collide(this.bird, this.logGroup, function(){
         this.die();
     }, null, this);
-    if(this.bird.y > gameOptions.gameHeight || this.bird.y < 0){
+    if(this.bird.y > gameOptions.gameHeight + 10 || this.bird.y < -100){
         this.die();
     }
     this.logGroup.getChildren().forEach(function(log){

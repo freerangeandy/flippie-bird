@@ -7,6 +7,7 @@ import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
+import gem from "../assets/gem-type3-red.png"
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -22,8 +23,8 @@ export default new Phaser.Class({
     this.load.image('mountainFGTrees', mountainFGTrees);
 
     this.load.image('log', log);
+    this.load.image('gem', gem);
     this.load.spritesheet('flippie', flippie, { frameWidth: 32, frameHeight: 32, endFrame: 3 })
-
   },
   create: function create() {
     this.addBackground()
@@ -37,12 +38,20 @@ export default new Phaser.Class({
         this.placeLogs(false);
     }
     this.logGroup.setVelocityX(-gameOptions.birdSpeed);
+
+    this.gemGroup = this.physics.add.group()
+    this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
+    this.placeGem()
+
     this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'flippie').play('fly');
     this.bird.angle = gameOptions.birdAngle
     this.bird.body.allowRotation = true
     this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
     this.bird.body.gravity.y = gameOptions.birdGravity
     this.bird.scale = gameOptions.birdScale
+    this.physics.add.overlap(this.bird, this.gemGroup, this.collectGem, this.flipGravity, this)
+    this.isFlipped = false
+
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
     this.topScore = localStorage.getItem(gameOptions.localStorageName) == null ? 0 : localStorage.getItem(gameOptions.localStorageName);
@@ -62,9 +71,39 @@ export default new Phaser.Class({
             this.logPool.push(log);
             if(this.logPool.length == 2){
                 this.placeLogs(true);
+                if (this.getRandomNum(3)){
+                  this.placeGem()
+                }
             }
         }
     }, this)
+  },
+  getRandomNum: function(sampleSize) {
+    let value = Phaser.Math.Between(0, sampleSize)
+    return value <= 1
+  },
+  collectGem: function(bird, gem) {
+    gem.disableBody(true, true)
+  },
+  flipGravity: function() {
+    this.isFlipped = !this.isFlipped
+    this.gemGroup.getChildren().forEach(function(gem){
+      gem.setFlipY(this.isFlipped)
+    }, this)
+    this.bird.setFlipY(this.isFlipped)
+    this.bird.body.gravity.y = -this.bird.body.gravity.y
+    if (this.isFlipped) {
+      this.bird.angle = -gameOptions.birdAngle
+      this.bird.body.angularVelocity = -gameOptions.birdAngularVelocity
+    } else {
+      this.bird.angle = gameOptions.birdAngle
+      this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
+    }
+    this.mountainsBack.setFlipY(this.isFlipped)
+    this.mountainsMid1.setFlipY(this.isFlipped)
+    this.mountainsMid2.setFlipY(this.isFlipped)
+    this.mountainsMid3.setFlipY(this.isFlipped)
+    this.mountainsFront.setFlipY(this.isFlipped)
   },
   loadFlippie: function(){
     this.anims.create({
@@ -152,10 +191,26 @@ export default new Phaser.Class({
           this.updateScore(1);
       }
   },
+  placeGem: function(){
+    let rightmostLog = this.getRightmostLog();
+    let gem = this.gemGroup.create(0, 0, 'gem')
+    this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
+    gem.x = rightmostLog + gameOptions.logDistance[0]/2 + 50
+    gem.y = Phaser.Math.Between(40, gameOptions.gameHeight - 40)
+    gem.width = 20
+    gem.displayWidth = gem.width
+    gem.scaleY = gem.scaleX
+    console.log(`gem placed: ${gem.x}, ${gem.y}`)
+  },
   flap: function(){
-      this.bird.body.velocity.y = -gameOptions.birdFlapPower;
+      if (this.isFlipped) {
+        this.bird.body.velocity.y = gameOptions.birdFlapPower;
+        this.bird.angle = -gameOptions.birdAngle
+      } else {
+        this.bird.body.velocity.y = -gameOptions.birdFlapPower;
+        this.bird.angle = gameOptions.birdAngle
+      }
       this.bird.anims.play('flap', true)
-      this.bird.angle = gameOptions.birdAngle
   },
   getRightmostLog: function (){
       let rightmostLog = 0;

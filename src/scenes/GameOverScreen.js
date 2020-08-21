@@ -35,7 +35,23 @@ export default new Phaser.Class({
     this.loadStandingFlippie()
     this.bird = this.physics.add.sprite(80, gameOptions.gameHeight - 30, 'flippieStand').play('stand');
 
-    this.add.text(gameOptions.gameWidth - 310, gameOptions.gameHeight / 2, "You win! Press space to restart.")
+    const textConfig = {
+      fontFamily: 'Verdana, sans-serif',
+      color: '#fff7e2',
+      align: "center"
+    }
+
+    this.lastScore = localStorage.getItem(gameOptions.localStorageScore) == null ? 0 : localStorage.getItem(gameOptions.localStorageScore);
+    this.topScore = localStorage.getItem(gameOptions.localStorageBest) == null ? 0 : localStorage.getItem(gameOptions.localStorageBest);
+    if (this.lastScore > this.topScore) {
+      this.result = `You set a new high score of ${this.lastScore}!`
+      localStorage.setItem(gameOptions.localStorageBest, this.lastScore);
+    } else if (this.lastScore === this.topScore) {
+      this.result = `You matched your high score of ${this.lastScore}!`
+    } else {
+      this.result = `You scored ${this.lastScore}. Keep trying!`
+    }
+    this.add.text(gameOptions.gameWidth / 2 - 133, gameOptions.gameHeight / 2 + 20, `${this.result}\n        Press space to restart.        `, textConfig)
   },
   update: function () {
     if (cursors.space.isDown) {

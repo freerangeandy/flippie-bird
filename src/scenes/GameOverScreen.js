@@ -33,7 +33,7 @@ export default new Phaser.Class({
     graphics.fillRect(0, 0, gameOptions.gameWidth, gameOptions.gameHeight);
 
     this.loadStandingFlippie()
-    this.bird = this.physics.add.sprite(80, gameOptions.gameHeight - 30, 'flippieStand').play('stand');
+    this.bird = this.physics.add.sprite(gameOptions.gameWidth / 2, gameOptions.gameHeight - 30, 'flippieStand').play('stand');
 
     const textConfig = {
       fontFamily: 'Verdana, sans-serif',
@@ -112,8 +112,8 @@ export default new Phaser.Class({
   loadStandingFlippie: function(){
     this.anims.create({
       key: 'stand',
-      frames: this.anims.generateFrameNumbers('flippieStand', { start: 4, end: 6, first: 4}),
-      frameRate: 5,
+      frames: this.anims.generateFrameNumbers('flippieStand', { frames: [4,4,4,4,5,5,4,4,4,4,6,6] }),
+      frameRate: 2,
       repeat: -1
     })
   },

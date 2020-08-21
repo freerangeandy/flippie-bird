@@ -105,7 +105,6 @@ export default new Phaser.Class({
       this.bird.angle = gameOptions.birdAngle
       this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
     }
-    this.mountainsBack.setFlipY(this.isFlipped)
     this.mountainsMid1.setFlipY(this.isFlipped)
     this.mountainsMid2.setFlipY(this.isFlipped)
     this.mountainsMid3.setFlipY(this.isFlipped)

@@ -228,6 +228,6 @@ export default new Phaser.Class({
   },
   die: function(){
       localStorage.setItem(gameOptions.localStorageName, Math.max(this.score, this.topScore));
-      this.scene.start('winscreen')
+      this.scene.start('gameoverscreen')
   }
 });

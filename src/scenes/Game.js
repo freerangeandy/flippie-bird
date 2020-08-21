@@ -99,8 +99,11 @@ export default new Phaser.Class({
       this.bird.angle = gameOptions.birdAngle
       this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
     }
-
-    console.log("Flippity flip")
+    this.mountainsBack.setFlipY(this.isFlipped)
+    this.mountainsMid1.setFlipY(this.isFlipped)
+    this.mountainsMid2.setFlipY(this.isFlipped)
+    this.mountainsMid3.setFlipY(this.isFlipped)
+    this.mountainsFront.setFlipY(this.isFlipped)
   },
   loadFlippie: function(){
     this.anims.create({
@@ -193,7 +196,7 @@ export default new Phaser.Class({
     let gem = this.gemGroup.create(0, 0, 'gem')
     this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
     gem.x = rightmostLog + gameOptions.logDistance[0]/2 + 50
-    gem.y = Phaser.Math.Between(20, gameOptions.gameHeight - 20)
+    gem.y = Phaser.Math.Between(40, gameOptions.gameHeight - 40)
     gem.width = 20
     gem.displayWidth = gem.width
     gem.scaleY = gem.scaleX

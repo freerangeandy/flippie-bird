@@ -1,7 +1,7 @@
-import Phaser from "phaser";
-import Game from "./scenes/Game";
-import SplashScreen from "./scenes/SplashScreen";
-import GameOverScreen from "./scenes/GameOverScreen";
+import Phaser from "phaser"
+import Game from "./scenes/Game"
+import SplashScreen from "./scenes/SplashScreen"
+import GameOverScreen from "./scenes/GameOverScreen"
 import { gameOptions } from "./constants"
 
 var config = {
@@ -17,12 +17,10 @@ var config = {
   physics: {
       default: 'arcade',
       arcade: {
-          gravity: {
-              y: 0
-          }
+          gravity: { y: 0 }
       }
   },
   scene: [SplashScreen, Game, GameOverScreen]
-};
+}
 
-var game = new Phaser.Game(config);
+var game = new Phaser.Game(config)

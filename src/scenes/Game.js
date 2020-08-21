@@ -177,12 +177,11 @@ export default new Phaser.Class({
     let rightmostLog = this.getRightmostLog();
     let gem = this.gemGroup.create(0, 0, 'gem')
     this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
-    gem.x = rightmostLog + 80
-    gem.y = Phaser.Math.Between(gameOptions.logHole[0], gameOptions.logHole[1]);
+    gem.x = rightmostLog + gameOptions.logDistance[0]/2 + 50
+    gem.y = Phaser.Math.Between(20, gameOptions.gameHeight - 20)
     gem.width = 20
     gem.displayWidth = gem.width
     gem.scaleY = gem.scaleX
-    console.log(`gem height: ${gem.height}`)
     console.log(`gem placed: ${gem.x}, ${gem.y}`)
   },
   flap: function(){

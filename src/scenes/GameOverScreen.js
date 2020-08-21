@@ -10,6 +10,20 @@ import { gameOptions } from "../constants"
 let graphics;
 let cursors;
 
+const headerConfig = {
+  fontFamily: 'Palatino, serif',
+  fontSize: '48px',
+  color: '#28a4f7',
+  stroke: '#fff7e2',
+  strokeThickness: '2'
+}
+
+const textConfig = {
+  fontFamily: 'Verdana, sans-serif',
+  color: '#fff7e2',
+  align: "center"
+}
+
 export default new Phaser.Class({
   Extends: Phaser.Scene,
   initialize: function () {
@@ -35,12 +49,7 @@ export default new Phaser.Class({
     this.loadStandingFlippie()
     this.bird = this.physics.add.sprite(gameOptions.gameWidth / 2, gameOptions.gameHeight - 30, 'flippieStand').play('stand');
 
-    const textConfig = {
-      fontFamily: 'Verdana, sans-serif',
-      color: '#fff7e2',
-      align: "center"
-    }
-
+    this.add.text(145, 40, 'Game Over', headerConfig)
     this.lastScore = localStorage.getItem(gameOptions.localStorageScore) == null ? 0 : localStorage.getItem(gameOptions.localStorageScore);
     this.topScore = localStorage.getItem(gameOptions.localStorageBest) == null ? 0 : localStorage.getItem(gameOptions.localStorageBest);
     if (this.lastScore > this.topScore) {

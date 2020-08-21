@@ -9,7 +9,6 @@ import { gameOptions } from "../constants"
 
 let graphics;
 let cursors;
-
 const headerConfig = {
   fontFamily: 'Palatino, serif',
   fontSize: '48px',
@@ -17,7 +16,6 @@ const headerConfig = {
   stroke: '#fff7e2',
   strokeThickness: '2'
 }
-
 const textConfig = {
   fontFamily: 'Verdana, sans-serif',
   color: '#fff7e2',

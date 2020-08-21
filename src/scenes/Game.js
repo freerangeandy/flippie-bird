@@ -54,7 +54,7 @@ export default new Phaser.Class({
 
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
-    this.topScore = localStorage.getItem(gameOptions.localStorageName) == null ? 0 : localStorage.getItem(gameOptions.localStorageName);
+    this.topScore = localStorage.getItem(gameOptions.localStorageBest) == null ? 0 : localStorage.getItem(gameOptions.localStorageBest);
     this.scoreText = this.add.text(10, 10, '');
     this.updateScore(this.score);
   },
@@ -227,7 +227,8 @@ export default new Phaser.Class({
     this.mountainsFront.tilePositionX += 0.75
   },
   die: function(){
-      localStorage.setItem(gameOptions.localStorageName, Math.max(this.score, this.topScore));
-      this.scene.start('winscreen')
+      localStorage.setItem(gameOptions.localStorageScore, this.score);
+      localStorage.setItem(gameOptions.localStorageBest, this.topScore);
+      this.scene.start('gameoverscreen')
   }
 });

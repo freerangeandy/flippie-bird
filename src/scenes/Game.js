@@ -9,6 +9,11 @@ import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
 import gem from "../assets/gem-type3-red.png"
 
+const scoresConfig = {
+  fontFamily: 'Verdana, sans-serif',
+  color: '#fff7e2',
+}
+
 export default new Phaser.Class({
   Extends: Phaser.Scene,
   initialize: function () {
@@ -30,6 +35,8 @@ export default new Phaser.Class({
     this.addBackground()
     this.loadFlippie()
 
+    this.score = 0;
+
     this.logGroup = this.physics.add.group();
     this.logPool = [];
     for(let i = 0; i < 4; i++){
@@ -43,7 +50,7 @@ export default new Phaser.Class({
     this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
     this.placeGem()
 
-    this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'flippie').play('fly');
+    this.bird = this.physics.add.sprite(50, gameOptions.gameHeight/ 2, 'flippie').play('fly');
     this.bird.angle = gameOptions.birdAngle
     this.bird.body.allowRotation = true
     this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
@@ -53,9 +60,8 @@ export default new Phaser.Class({
     this.isFlipped = false
 
     this.input.on('pointerdown', this.flap, this);
-    this.score = 0;
     this.topScore = localStorage.getItem(gameOptions.localStorageBest) == null ? 0 : localStorage.getItem(gameOptions.localStorageBest);
-    this.scoreText = this.add.text(10, 10, '');
+    this.scoreText = this.add.text(10, 10, '', scoresConfig);
     this.updateScore(this.score);
   },
   update: function () {
@@ -63,7 +69,7 @@ export default new Phaser.Class({
     this.physics.world.collide(this.bird, this.logGroup, function(){
         this.die();
     }, null, this);
-    if(this.bird.y > gameOptions.gameHeight || this.bird.y < 0){
+    if(this.bird.y > gameOptions.gameHeight + 10 || this.bird.y < -100){
         this.die();
     }
     this.logGroup.getChildren().forEach(function(log){
@@ -79,7 +85,7 @@ export default new Phaser.Class({
     }, this)
   },
   getRandomNum: function(sampleSize) {
-    let value = Phaser.Math.Between(0, sampleSize)
+    const value = Phaser.Math.Between(0, sampleSize)
     return value <= 1
   },
   collectGem: function(bird, gem) {
@@ -175,16 +181,18 @@ export default new Phaser.Class({
       this.scoreText.text = 'Score: ' + this.score + '\nBest: ' + this.topScore;
   },
   placeLogs: function(addScore){
-      let rightmost = this.getRightmostLog();
-      let logHoleHeight = Phaser.Math.Between(gameOptions.logHole[0], gameOptions.logHole[1]);
-      let logHolePosition = Phaser.Math.Between(gameOptions.minLogHeight + logHoleHeight / 2, gameOptions.gameHeight- gameOptions.minLogHeight - logHoleHeight / 2);
+      const rightmost = this.getRightmostLog()
+      const lowerBound = Math.max(gameOptions.logHole[0] - 2*this.score, gameOptions.minLogHole)
+      const upperBound = Math.max(gameOptions.logHole[1] - 3*this.score, gameOptions.minLogHole)
+      const logHoleHeight = Phaser.Math.Between(lowerBound, upperBound)
+      const logHolePosition = Phaser.Math.Between(gameOptions.minLogHeight + logHoleHeight / 2, gameOptions.gameHeight- gameOptions.minLogHeight - logHoleHeight / 2);
       this.logPool[0].x = rightmost + this.logPool[0].getBounds().width + Phaser.Math.Between(gameOptions.logDistance[0], gameOptions.logDistance[1]);
       this.logPool[0].y = logHolePosition - logHoleHeight / 2;
       this.logPool[0].setOrigin(0, 1);
       this.logPool[1].x = this.logPool[0].x;
       this.logPool[1].y = logHolePosition + logHoleHeight / 2;
       this.logPool[1].setOrigin(0, 0);
-      this.logPool[0].setSize(this.logPool[0].width - 35, this.logPool[0].height)
+      this.logPool[0].setSize(this.logPool[0].width - 35, this.logPool[0].height - 25)
       this.logPool[1].setSize(this.logPool[1].width - 35, this.logPool[1].height - 35)
       this.logPool = [];
       if(addScore){
@@ -192,7 +200,7 @@ export default new Phaser.Class({
       }
   },
   placeGem: function(){
-    let rightmostLog = this.getRightmostLog();
+    const rightmostLog = this.getRightmostLog();
     let gem = this.gemGroup.create(0, 0, 'gem')
     this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
     gem.x = rightmostLog + gameOptions.logDistance[0]/2 + 50
@@ -200,7 +208,6 @@ export default new Phaser.Class({
     gem.width = 20
     gem.displayWidth = gem.width
     gem.scaleY = gem.scaleX
-    console.log(`gem placed: ${gem.x}, ${gem.y}`)
   },
   flap: function(){
       if (this.isFlipped) {

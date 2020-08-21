@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import Game from "./scenes/Game";
 import SplashScreen from "./scenes/SplashScreen";
-import WinScreen from "./scenes/WinScreen";
+import GameOverScreen from "./scenes/GameOverScreen";
 import { gameOptions } from "./constants"
 
 var config = {
@@ -22,7 +22,7 @@ var config = {
           }
       }
   },
-  scene: [SplashScreen, Game, WinScreen]
+  scene: [SplashScreen, Game, GameOverScreen]
 };
 
 var game = new Phaser.Game(config);

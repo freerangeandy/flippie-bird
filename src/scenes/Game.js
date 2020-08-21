@@ -50,6 +50,7 @@ export default new Phaser.Class({
     this.bird.body.gravity.y = gameOptions.birdGravity
     this.bird.scale = gameOptions.birdScale
     this.physics.add.overlap(this.bird, this.gemGroup, this.collectGem, this.flipGravity, this)
+    this.isFlipped = false
 
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
@@ -85,6 +86,20 @@ export default new Phaser.Class({
     gem.disableBody(true, true)
   },
   flipGravity: function() {
+    this.isFlipped = !this.isFlipped
+    this.gemGroup.getChildren().forEach(function(gem){
+      gem.setFlipY(this.isFlipped)
+    }, this)
+    this.bird.setFlipY(this.isFlipped)
+    this.bird.body.gravity.y = -this.bird.body.gravity.y
+    if (this.isFlipped) {
+      this.bird.angle = -gameOptions.birdAngle
+      this.bird.body.angularVelocity = -gameOptions.birdAngularVelocity
+    } else {
+      this.bird.angle = gameOptions.birdAngle
+      this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
+    }
+
     console.log("Flippity flip")
   },
   loadFlippie: function(){
@@ -185,9 +200,14 @@ export default new Phaser.Class({
     console.log(`gem placed: ${gem.x}, ${gem.y}`)
   },
   flap: function(){
-      this.bird.body.velocity.y = -gameOptions.birdFlapPower;
+      if (this.isFlipped) {
+        this.bird.body.velocity.y = gameOptions.birdFlapPower;
+        this.bird.angle = -gameOptions.birdAngle
+      } else {
+        this.bird.body.velocity.y = -gameOptions.birdFlapPower;
+        this.bird.angle = gameOptions.birdAngle
+      }
       this.bird.anims.play('flap', true)
-      this.bird.angle = gameOptions.birdAngle
   },
   getRightmostLog: function (){
       let rightmostLog = 0;

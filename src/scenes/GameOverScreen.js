@@ -58,7 +58,7 @@ export default new Phaser.Class({
     } else if (this.lastScore === this.topScore) {
       this.result = `You matched your high score of ${this.lastScore}!`
     } else {
-      this.result = `You scored ${this.lastScore}. Keep trying!`
+      this.result = `Your score was ${this.lastScore}. Keep trying!`
     }
     this.add.text(gameOptions.gameWidth / 2 - 133, gameOptions.gameHeight / 2 + 20, `${this.result}\n        Press space to restart.        `, textConfig)
   },

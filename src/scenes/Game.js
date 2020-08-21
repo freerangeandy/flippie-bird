@@ -9,6 +9,11 @@ import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
 import gem from "../assets/gem-type3-red.png"
 
+const scoresConfig = {
+  fontFamily: 'Verdana, sans-serif',
+  color: '#fff7e2',
+}
+
 export default new Phaser.Class({
   Extends: Phaser.Scene,
   initialize: function () {
@@ -43,7 +48,7 @@ export default new Phaser.Class({
     this.gemGroup.setVelocityX(-gameOptions.birdSpeed)
     this.placeGem()
 
-    this.bird = this.physics.add.sprite(80, gameOptions.gameHeight/ 2, 'flippie').play('fly');
+    this.bird = this.physics.add.sprite(50, gameOptions.gameHeight/ 2, 'flippie').play('fly');
     this.bird.angle = gameOptions.birdAngle
     this.bird.body.allowRotation = true
     this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
@@ -55,7 +60,7 @@ export default new Phaser.Class({
     this.input.on('pointerdown', this.flap, this);
     this.score = 0;
     this.topScore = localStorage.getItem(gameOptions.localStorageBest) == null ? 0 : localStorage.getItem(gameOptions.localStorageBest);
-    this.scoreText = this.add.text(10, 10, '');
+    this.scoreText = this.add.text(10, 10, '', scoresConfig);
     this.updateScore(this.score);
   },
   update: function () {

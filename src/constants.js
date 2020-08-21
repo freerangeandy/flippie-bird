@@ -1,4 +1,3 @@
-
 export const gameOptions = {
   gameHeight: 320,
   gameWidth: 540,
@@ -18,5 +17,6 @@ export const gameOptions = {
   // hole range between logs, in pixels
   logHole: [110, 150],
   // local storage object name
-  localStorageName: 'bestFlippieScore'
+  localStorageScore: 'lastFlippieScore',
+  localStorageBest: 'bestFlippieScore',
 }

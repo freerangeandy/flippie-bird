@@ -1,4 +1,5 @@
 import Phaser from "phaser"
+
 import mountainBG from "../assets/parallax-mountain-bg.png"
 import mountainFar from "../assets/parallax-mountain-montain-far.png"
 import mountains from "../assets/parallax-mountain-mountains.png"
@@ -6,6 +7,7 @@ import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippieStand from "../assets/flyingbird.png"
 import { gameOptions } from "../constants"
+import { addBackground } from "../utils"
 
 let graphics
 let cursors

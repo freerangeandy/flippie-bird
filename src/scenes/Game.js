@@ -1,5 +1,5 @@
 import Phaser from "phaser"
-import { gameOptions } from "../constants"
+
 import mountainBG from "../assets/parallax-mountain-bg.png"
 import mountainFar from "../assets/parallax-mountain-montain-far.png"
 import mountains from "../assets/parallax-mountain-mountains.png"
@@ -8,6 +8,8 @@ import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
 import gem from "../assets/gem-type3-red.png"
+import { gameOptions } from "../constants"
+import { addBackgroundSprite } from "../utils"
 
 const scoresConfig = {
   fontFamily: 'Verdana, sans-serif',

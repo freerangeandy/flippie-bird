@@ -9,3 +9,8 @@ export function addBackgroundSprite(game, spriteName){
     spriteName
   )
 }
+
+export function scaleSprite(sprite, factor) {
+  sprite.tileScaleX=factor
+  sprite.tileScaleY=factor
+}

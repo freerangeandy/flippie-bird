@@ -8,17 +8,17 @@ var config = {
   type: Phaser.AUTO,
   backgroundColor: 0xab6a8c,
   scale: {
-      mode: Phaser.Scale.FIT,
-      autoCenter: Phaser.Scale.CENTER_BOTH,
-      width: gameOptions.gameWidth,
-      height: gameOptions.gameHeight
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: gameOptions.gameWidth,
+    height: gameOptions.gameHeight
   },
   pixelArt: true,
   physics: {
-      default: 'arcade',
-      arcade: {
-          gravity: { y: 0 }
-      }
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 0 }
+    }
   },
   scene: [SplashScreen, Game, GameOverScreen]
 }

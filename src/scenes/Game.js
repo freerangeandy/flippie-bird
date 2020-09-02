@@ -27,9 +27,9 @@ export default new Phaser.Class({
     this.logGroup = this.physics.add.group()
     this.logPool = []
     for(let i = 0; i < 4; i++){
-        this.logPool.push(this.logGroup.create(0, 0, 'log'))
-        this.logPool.push(this.logGroup.create(0, 0, 'log'))
-        this.placeLogs(false)
+      this.logPool.push(this.logGroup.create(0, 0, 'log'))
+      this.logPool.push(this.logGroup.create(0, 0, 'log'))
+      this.placeLogs(false)
     }
     this.logGroup.setVelocityX(-gameOptions.birdSpeed)
 
@@ -54,21 +54,21 @@ export default new Phaser.Class({
   update: function () {
     this.backgroundParallax()
     this.physics.world.collide(this.bird, this.logGroup, function(){
-        this.die()
+      this.die()
     }, null, this)
     if(this.bird.y > gameOptions.gameHeight + 10 || this.bird.y < -100){
-        this.die()
+      this.die()
     }
     this.logGroup.getChildren().forEach(function(log){
-        if(log.getBounds().right < 0){
-            this.logPool.push(log)
-            if(this.logPool.length == 2){
-                this.placeLogs(true)
-                if (this.getRandomNum(3)){
-                  this.placeGem()
-                }
-            }
+      if(log.getBounds().right < 0){
+        this.logPool.push(log)
+        if(this.logPool.length == 2){
+          this.placeLogs(true)
+          if (this.getRandomNum(3)){
+            this.placeGem()
+          }
         }
+      }
     }, this)
   },
   getRandomNum: function(sampleSize) {
@@ -121,27 +121,27 @@ export default new Phaser.Class({
     scaleSprite(this.mountainsFront, 2)
   },
   updateScore: function(inc){
-      this.score += inc
-      this.scoreText.text = 'Score: ' + this.score + '\nBest: ' + this.topScore
+    this.score += inc
+    this.scoreText.text = 'Score: ' + this.score + '\nBest: ' + this.topScore
   },
   placeLogs: function(addScore){
-      const rightmost = this.getRightmostLog()
-      const lowerBound = Math.max(gameOptions.logHole[0] - 2*this.score, gameOptions.minLogHole)
-      const upperBound = Math.max(gameOptions.logHole[1] - 3*this.score, gameOptions.minLogHole)
-      const logHoleHeight = Phaser.Math.Between(lowerBound, upperBound)
-      const logHolePosition = Phaser.Math.Between(gameOptions.minLogHeight + logHoleHeight / 2, gameOptions.gameHeight- gameOptions.minLogHeight - logHoleHeight / 2)
-      this.logPool[0].x = rightmost + this.logPool[0].getBounds().width + Phaser.Math.Between(gameOptions.logDistance[0], gameOptions.logDistance[1])
-      this.logPool[0].y = logHolePosition - logHoleHeight / 2
-      this.logPool[0].setOrigin(0, 1)
-      this.logPool[1].x = this.logPool[0].x
-      this.logPool[1].y = logHolePosition + logHoleHeight / 2
-      this.logPool[1].setOrigin(0, 0)
-      this.logPool[0].setSize(this.logPool[0].width - 35, this.logPool[0].height - 25)
-      this.logPool[1].setSize(this.logPool[1].width - 35, this.logPool[1].height - 35)
-      this.logPool = []
-      if(addScore){
-          this.updateScore(1)
-      }
+    const rightmost = this.getRightmostLog()
+    const lowerBound = Math.max(gameOptions.logHole[0] - 2*this.score, gameOptions.minLogHole)
+    const upperBound = Math.max(gameOptions.logHole[1] - 3*this.score, gameOptions.minLogHole)
+    const logHoleHeight = Phaser.Math.Between(lowerBound, upperBound)
+    const logHolePosition = Phaser.Math.Between(gameOptions.minLogHeight + logHoleHeight / 2, gameOptions.gameHeight- gameOptions.minLogHeight - logHoleHeight / 2)
+    this.logPool[0].x = rightmost + this.logPool[0].getBounds().width + Phaser.Math.Between(gameOptions.logDistance[0], gameOptions.logDistance[1])
+    this.logPool[0].y = logHolePosition - logHoleHeight / 2
+    this.logPool[0].setOrigin(0, 1)
+    this.logPool[1].x = this.logPool[0].x
+    this.logPool[1].y = logHolePosition + logHoleHeight / 2
+    this.logPool[1].setOrigin(0, 0)
+    this.logPool[0].setSize(this.logPool[0].width - 35, this.logPool[0].height - 25)
+    this.logPool[1].setSize(this.logPool[1].width - 35, this.logPool[1].height - 35)
+    this.logPool = []
+    if(addScore){
+      this.updateScore(1)
+    }
   },
   placeGem: function(){
     const rightmostLog = this.getRightmostLog()
@@ -154,21 +154,21 @@ export default new Phaser.Class({
     gem.scaleY = gem.scaleX
   },
   flap: function(){
-      if (this.isFlipped) {
-        this.bird.body.velocity.y = gameOptions.birdFlapPower
-        this.bird.angle = -gameOptions.birdAngle
-      } else {
-        this.bird.body.velocity.y = -gameOptions.birdFlapPower
-        this.bird.angle = gameOptions.birdAngle
-      }
-      this.bird.anims.play('flap', true)
+    if (this.isFlipped) {
+      this.bird.body.velocity.y = gameOptions.birdFlapPower
+      this.bird.angle = -gameOptions.birdAngle
+    } else {
+      this.bird.body.velocity.y = -gameOptions.birdFlapPower
+      this.bird.angle = gameOptions.birdAngle
+    }
+    this.bird.anims.play('flap', true)
   },
   getRightmostLog: function (){
-      let rightmostLog = 0
-      this.logGroup.getChildren().forEach(function(log){
-          rightmostLog = Math.max(rightmostLog, log.x)
-      })
-      return rightmostLog
+    let rightmostLog = 0
+    this.logGroup.getChildren().forEach(function(log){
+      rightmostLog = Math.max(rightmostLog, log.x)
+    })
+    return rightmostLog
   },
   backgroundParallax: function() {
     this.mountainsBack.tilePositionX += 0.05
@@ -178,8 +178,8 @@ export default new Phaser.Class({
     this.mountainsFront.tilePositionX += 0.75
   },
   die: function(){
-      localStorage.setItem(gameOptions.localStorageScore, this.score)
-      localStorage.setItem(gameOptions.localStorageBest, this.topScore)
-      this.scene.start('gameoverscreen')
+    localStorage.setItem(gameOptions.localStorageScore, this.score)
+    localStorage.setItem(gameOptions.localStorageBest, this.topScore)
+    this.scene.start('gameoverscreen')
   }
 });

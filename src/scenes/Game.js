@@ -93,19 +93,15 @@ export default new Phaser.Class({
     this.gemGroup.getChildren().forEach(function(gem){
       gem.setFlipY(this.isFlipped)
     }, this)
-    this.bird.setFlipY(this.isFlipped)
-    this.bird.body.gravity.y = -this.bird.body.gravity.y
-    if (this.isFlipped) {
-      this.bird.angle = -gameOptions.birdAngle
-      this.bird.body.angularVelocity = -gameOptions.birdAngularVelocity
-    } else {
-      this.bird.angle = gameOptions.birdAngle
-      this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
-    }
     this.mountainsMid1.setFlipY(this.isFlipped)
     this.mountainsMid2.setFlipY(this.isFlipped)
     this.mountainsMid3.setFlipY(this.isFlipped)
     this.mountainsFront.setFlipY(this.isFlipped)
+    const flipFactor = this.isFlipped ? -1 : 1
+    this.bird.body.gravity.y = -this.bird.body.gravity.y
+    this.bird.angle = flipFactor * gameOptions.birdAngle
+    this.bird.body.angularVelocity = flipFactor * gameOptions.birdAngularVelocity
+    this.bird.setFlipY(this.isFlipped)
   },
   loadFlippie: function(){
     this.anims.create({

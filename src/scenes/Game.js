@@ -1,15 +1,10 @@
 import Phaser from "phaser"
 
-import mountainBG from "../assets/parallax-mountain-bg.png"
-import mountainFar from "../assets/parallax-mountain-montain-far.png"
-import mountains from "../assets/parallax-mountain-mountains.png"
-import mountainTrees from "../assets/parallax-mountain-trees.png"
-import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
 import gem from "../assets/gem-type3-red.png"
 import { gameOptions, textConfig } from "../constants"
-import { addBackgroundSprite, scaleSprite } from "../utils"
+import { loadBackgroundImages, addBackgroundSprite, scaleSprite } from "../utils"
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -18,12 +13,7 @@ export default new Phaser.Class({
     window.GAME = this
   },
   preload: function preload() {
-    this.load.image('mountainBG', mountainBG)
-    this.load.image('mountainFar', mountainFar)
-    this.load.image('mountains', mountains)
-    this.load.image('mountainTrees', mountainTrees)
-    this.load.image('mountainFGTrees', mountainFGTrees)
-
+    loadBackgroundImages(this)
     this.load.image('log', log)
     this.load.image('gem', gem)
     this.load.spritesheet('flippie', flippie, { frameWidth: 32, frameHeight: 32, endFrame: 3 })

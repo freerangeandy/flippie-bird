@@ -1,12 +1,7 @@
 import Phaser from "phaser"
 
-import mountainBG from "../assets/parallax-mountain-bg.png"
-import mountainFar from "../assets/parallax-mountain-montain-far.png"
-import mountains from "../assets/parallax-mountain-mountains.png"
-import mountainTrees from "../assets/parallax-mountain-trees.png"
-import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import { gameOptions, headerConfig, textConfig } from "../constants"
-import { addBackgroundSprite, scaleSprite } from "../utils"
+import { loadBackgroundImages, addBackgroundSprite, scaleSprite } from "../utils"
 
 let cursors
 
@@ -16,11 +11,7 @@ export default new Phaser.Class({
     Phaser.Scene.call(this, { key: 'splashscreen' })
   },
   preload: function preload() {
-    this.load.image('mountainBG', mountainBG)
-    this.load.image('mountainFar', mountainFar)
-    this.load.image('mountains', mountains)
-    this.load.image('mountainTrees', mountainTrees)
-    this.load.image('mountainFGTrees', mountainFGTrees)
+    loadBackgroundImages(this)
   },
   create: function() {
     this.addBackground()

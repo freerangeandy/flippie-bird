@@ -1,4 +1,17 @@
+import mountainBG from "./assets/parallax-mountain-bg.png"
+import mountainFar from "./assets/parallax-mountain-montain-far.png"
+import mountains from "./assets/parallax-mountain-mountains.png"
+import mountainTrees from "./assets/parallax-mountain-trees.png"
+import mountainFGTrees from "./assets/parallax-mountain-foreground-trees.png"
 import { gameOptions } from "./constants"
+
+function loadBackgroundImages(game) {
+  game.load.image('mountainBG', mountainBG)
+  game.load.image('mountainFar', mountainFar)
+  game.load.image('mountains', mountains)
+  game.load.image('mountainTrees', mountainTrees)
+  game.load.image('mountainFGTrees', mountainFGTrees)
+}
 
 function addBackgroundSprite(game, spriteName){
   return game.add.tileSprite(
@@ -16,6 +29,7 @@ function scaleSprite(sprite, factor) {
 }
 
 export {
+  loadBackgroundImages,
   addBackgroundSprite,
   scaleSprite
 }

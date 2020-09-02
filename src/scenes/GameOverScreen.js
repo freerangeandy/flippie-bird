@@ -7,7 +7,7 @@ import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippieStand from "../assets/flyingbird.png"
 import { gameOptions } from "../constants"
-import { addBackground } from "../utils"
+import { addBackgroundSprite } from "../utils"
 
 let graphics
 let cursors
@@ -68,53 +68,23 @@ export default new Phaser.Class({
     }
   },
   addBackground: function(){
-    this.mountainsBack = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainBG'
-    )
+    this.mountainsBack = addBackgroundSprite(this, 'mountainBG')
     this.mountainsBack.tileScaleX=2
     this.mountainsBack.tileScaleY=2
 
-    this.mountainsMid3 = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainFar'
-    )
+    this.mountainsMid3 = addBackgroundSprite(this, 'mountainFar')
     this.mountainsMid3.tileScaleX=2
     this.mountainsMid3.tileScaleY=2
 
-    this.mountainsMid2 = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountains'
-    )
+    this.mountainsMid2 = addBackgroundSprite(this, 'mountains')
     this.mountainsMid2.tileScaleX=2
     this.mountainsMid2.tileScaleY=2
 
-    this.mountainsMid1 = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainTrees'
-    )
+    this.mountainsMid1 = addBackgroundSprite(this, 'mountainTrees')
     this.mountainsMid1.tileScaleX=2
     this.mountainsMid1.tileScaleY=2
 
-    this.mountainsFront = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainFGTrees'
-    )
+    this.mountainsFront = addBackgroundSprite(this, 'mountainFGTrees')
     this.mountainsFront.tileScaleX=2
     this.mountainsFront.tileScaleY=2
   },

@@ -1,18 +1,10 @@
 import Phaser from "phaser"
-import { gameOptions } from "../constants"
-import mountainBG from "../assets/parallax-mountain-bg.png"
-import mountainFar from "../assets/parallax-mountain-montain-far.png"
-import mountains from "../assets/parallax-mountain-mountains.png"
-import mountainTrees from "../assets/parallax-mountain-trees.png"
-import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
+
 import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
 import gem from "../assets/gem-type3-red.png"
-
-const scoresConfig = {
-  fontFamily: 'Verdana, sans-serif',
-  color: '#fff7e2',
-}
+import { gameOptions, textConfig } from "../constants"
+import { loadBackgroundImages, addBackgroundSprite, scaleSprite, getRandomNum } from "../utils"
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -21,12 +13,7 @@ export default new Phaser.Class({
     window.GAME = this
   },
   preload: function preload() {
-    this.load.image('mountainBG', mountainBG)
-    this.load.image('mountainFar', mountainFar)
-    this.load.image('mountains', mountains)
-    this.load.image('mountainTrees', mountainTrees)
-    this.load.image('mountainFGTrees', mountainFGTrees)
-
+    loadBackgroundImages(this)
     this.load.image('log', log)
     this.load.image('gem', gem)
     this.load.spritesheet('flippie', flippie, { frameWidth: 32, frameHeight: 32, endFrame: 3 })
@@ -40,9 +27,9 @@ export default new Phaser.Class({
     this.logGroup = this.physics.add.group()
     this.logPool = []
     for(let i = 0; i < 4; i++){
-        this.logPool.push(this.logGroup.create(0, 0, 'log'))
-        this.logPool.push(this.logGroup.create(0, 0, 'log'))
-        this.placeLogs(false)
+      this.logPool.push(this.logGroup.create(0, 0, 'log'))
+      this.logPool.push(this.logGroup.create(0, 0, 'log'))
+      this.placeLogs(false)
     }
     this.logGroup.setVelocityX(-gameOptions.birdSpeed)
 
@@ -61,32 +48,28 @@ export default new Phaser.Class({
 
     this.input.on('pointerdown', this.flap, this)
     this.topScore = localStorage.getItem(gameOptions.localStorageBest) == null ? 0 : localStorage.getItem(gameOptions.localStorageBest)
-    this.scoreText = this.add.text(10, 10, '', scoresConfig)
+    this.scoreText = this.add.text(10, 10, '', textConfig)
     this.updateScore(this.score)
   },
   update: function () {
     this.backgroundParallax()
     this.physics.world.collide(this.bird, this.logGroup, function(){
-        this.die()
+      this.die()
     }, null, this)
     if(this.bird.y > gameOptions.gameHeight + 10 || this.bird.y < -100){
-        this.die()
+      this.die()
     }
     this.logGroup.getChildren().forEach(function(log){
-        if(log.getBounds().right < 0){
-            this.logPool.push(log)
-            if(this.logPool.length == 2){
-                this.placeLogs(true)
-                if (this.getRandomNum(3)){
-                  this.placeGem()
-                }
-            }
+      if(log.getBounds().right < 0){
+        this.logPool.push(log)
+        if(this.logPool.length == 2){
+          this.placeLogs(true)
+          if (getRandomNum(3)){
+            this.placeGem()
+          }
         }
+      }
     }, this)
-  },
-  getRandomNum: function(sampleSize) {
-    const value = Phaser.Math.Between(0, sampleSize)
-    return value <= 1
   },
   collectGem: function(bird, gem) {
     gem.disableBody(true, true)
@@ -96,19 +79,15 @@ export default new Phaser.Class({
     this.gemGroup.getChildren().forEach(function(gem){
       gem.setFlipY(this.isFlipped)
     }, this)
-    this.bird.setFlipY(this.isFlipped)
-    this.bird.body.gravity.y = -this.bird.body.gravity.y
-    if (this.isFlipped) {
-      this.bird.angle = -gameOptions.birdAngle
-      this.bird.body.angularVelocity = -gameOptions.birdAngularVelocity
-    } else {
-      this.bird.angle = gameOptions.birdAngle
-      this.bird.body.angularVelocity = gameOptions.birdAngularVelocity
-    }
     this.mountainsMid1.setFlipY(this.isFlipped)
     this.mountainsMid2.setFlipY(this.isFlipped)
     this.mountainsMid3.setFlipY(this.isFlipped)
     this.mountainsFront.setFlipY(this.isFlipped)
+    const flipFactor = this.isFlipped ? -1 : 1
+    this.bird.body.gravity.y = -this.bird.body.gravity.y
+    this.bird.angle = flipFactor * gameOptions.birdAngle
+    this.bird.body.angularVelocity = flipFactor * gameOptions.birdAngularVelocity
+    this.bird.setFlipY(this.isFlipped)
   },
   loadFlippie: function(){
     this.anims.create({
@@ -125,78 +104,40 @@ export default new Phaser.Class({
     })
   },
   addBackground: function(){
-    this.mountainsBack = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainBG'
-    )
-    this.mountainsBack.tileScaleX=2
-    this.mountainsBack.tileScaleY=2
+    this.mountainsBack = addBackgroundSprite(this, 'mountainBG')
+    this.mountainsMid3 = addBackgroundSprite(this, 'mountainFar')
+    this.mountainsMid2 = addBackgroundSprite(this, 'mountains')
+    this.mountainsMid1 = addBackgroundSprite(this, 'mountainTrees')
+    this.mountainsFront = addBackgroundSprite(this, 'mountainFGTrees')
 
-    this.mountainsMid3 = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainFar'
-    )
-    this.mountainsMid3.tileScaleX=2
-    this.mountainsMid3.tileScaleY=2
-
-    this.mountainsMid2 = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountains'
-    )
-    this.mountainsMid2.tileScaleX=2
-    this.mountainsMid2.tileScaleY=2
-
-    this.mountainsMid1 = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainTrees'
-    )
-    this.mountainsMid1.tileScaleX=2
-    this.mountainsMid1.tileScaleY=2
-
-    this.mountainsFront = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainFGTrees'
-    )
-    this.mountainsFront.tileScaleX=2
-    this.mountainsFront.tileScaleY=2
+    scaleSprite(this.mountainsBack, 2)
+    scaleSprite(this.mountainsMid3, 2)
+    scaleSprite(this.mountainsMid2, 2)
+    scaleSprite(this.mountainsMid1, 2)
+    scaleSprite(this.mountainsFront, 2)
   },
   updateScore: function(inc){
-      this.score += inc
-      this.scoreText.text = 'Score: ' + this.score + '\nBest: ' + this.topScore
+    this.score += inc
+    this.scoreText.text = 'Score: ' + this.score + '\nBest: ' + this.topScore
   },
   placeLogs: function(addScore){
-      const rightmost = this.getRightmostLog()
-      const lowerBound = Math.max(gameOptions.logHole[0] - 2*this.score, gameOptions.minLogHole)
-      const upperBound = Math.max(gameOptions.logHole[1] - 3*this.score, gameOptions.minLogHole)
-      const logHoleHeight = Phaser.Math.Between(lowerBound, upperBound)
-      const logHolePosition = Phaser.Math.Between(gameOptions.minLogHeight + logHoleHeight / 2, gameOptions.gameHeight- gameOptions.minLogHeight - logHoleHeight / 2)
-      this.logPool[0].x = rightmost + this.logPool[0].getBounds().width + Phaser.Math.Between(gameOptions.logDistance[0], gameOptions.logDistance[1])
-      this.logPool[0].y = logHolePosition - logHoleHeight / 2
-      this.logPool[0].setOrigin(0, 1)
-      this.logPool[1].x = this.logPool[0].x
-      this.logPool[1].y = logHolePosition + logHoleHeight / 2
-      this.logPool[1].setOrigin(0, 0)
-      this.logPool[0].setSize(this.logPool[0].width - 35, this.logPool[0].height - 25)
-      this.logPool[1].setSize(this.logPool[1].width - 35, this.logPool[1].height - 35)
-      this.logPool = []
-      if(addScore){
-          this.updateScore(1)
-      }
+    const rightmost = this.getRightmostLog()
+    const lowerBound = Math.max(gameOptions.logHole[0] - 2*this.score, gameOptions.minLogHole)
+    const upperBound = Math.max(gameOptions.logHole[1] - 3*this.score, gameOptions.minLogHole)
+    const logHoleHeight = Phaser.Math.Between(lowerBound, upperBound)
+    const logHolePosition = Phaser.Math.Between(gameOptions.minLogHeight + logHoleHeight / 2, gameOptions.gameHeight- gameOptions.minLogHeight - logHoleHeight / 2)
+    this.logPool[0].x = rightmost + this.logPool[0].getBounds().width + Phaser.Math.Between(gameOptions.logDistance[0], gameOptions.logDistance[1])
+    this.logPool[0].y = logHolePosition - logHoleHeight / 2
+    this.logPool[0].setOrigin(0, 1)
+    this.logPool[1].x = this.logPool[0].x
+    this.logPool[1].y = logHolePosition + logHoleHeight / 2
+    this.logPool[1].setOrigin(0, 0)
+    this.logPool[0].setSize(this.logPool[0].width - 35, this.logPool[0].height - 25)
+    this.logPool[1].setSize(this.logPool[1].width - 35, this.logPool[1].height - 35)
+    this.logPool = []
+    if(addScore){
+      this.updateScore(1)
+    }
   },
   placeGem: function(){
     const rightmostLog = this.getRightmostLog()
@@ -209,21 +150,17 @@ export default new Phaser.Class({
     gem.scaleY = gem.scaleX
   },
   flap: function(){
-      if (this.isFlipped) {
-        this.bird.body.velocity.y = gameOptions.birdFlapPower
-        this.bird.angle = -gameOptions.birdAngle
-      } else {
-        this.bird.body.velocity.y = -gameOptions.birdFlapPower
-        this.bird.angle = gameOptions.birdAngle
-      }
-      this.bird.anims.play('flap', true)
+    const flipFactor = this.isFlipped ? -1 : 1
+    this.bird.body.velocity.y = -flipFactor * gameOptions.birdFlapPower
+    this.bird.angle = flipFactor * gameOptions.birdAngle
+    this.bird.anims.play('flap', true)
   },
   getRightmostLog: function (){
-      let rightmostLog = 0
-      this.logGroup.getChildren().forEach(function(log){
-          rightmostLog = Math.max(rightmostLog, log.x)
-      })
-      return rightmostLog
+    let rightmostLog = 0
+    this.logGroup.getChildren().forEach(function(log){
+      rightmostLog = Math.max(rightmostLog, log.x)
+    })
+    return rightmostLog
   },
   backgroundParallax: function() {
     this.mountainsBack.tilePositionX += 0.05
@@ -233,8 +170,8 @@ export default new Phaser.Class({
     this.mountainsFront.tilePositionX += 0.75
   },
   die: function(){
-      localStorage.setItem(gameOptions.localStorageScore, this.score)
-      localStorage.setItem(gameOptions.localStorageBest, this.topScore)
-      this.scene.start('gameoverscreen')
+    localStorage.setItem(gameOptions.localStorageScore, this.score)
+    localStorage.setItem(gameOptions.localStorageBest, this.topScore)
+    this.scene.start('gameoverscreen')
   }
 });

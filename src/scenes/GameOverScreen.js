@@ -1,26 +1,11 @@
 import Phaser from "phaser"
-import mountainBG from "../assets/parallax-mountain-bg.png"
-import mountainFar from "../assets/parallax-mountain-montain-far.png"
-import mountains from "../assets/parallax-mountain-mountains.png"
-import mountainTrees from "../assets/parallax-mountain-trees.png"
-import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
+
 import flippieStand from "../assets/flyingbird.png"
-import { gameOptions } from "../constants"
+import { gameOptions, headerConfig, centerTextConfig } from "../constants"
+import { loadBackgroundImages, addBackgroundSprite, scaleSprite } from "../utils"
 
 let graphics
 let cursors
-const headerConfig = {
-  fontFamily: 'Palatino, serif',
-  fontSize: '48px',
-  color: '#28a4f7',
-  stroke: '#fff7e2',
-  strokeThickness: '2'
-}
-const textConfig = {
-  fontFamily: 'Verdana, sans-serif',
-  color: '#fff7e2',
-  align: "center"
-}
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -28,12 +13,7 @@ export default new Phaser.Class({
     Phaser.Scene.call(this, { key: 'gameoverscreen' })
   },
   preload: function() {
-    this.load.image('mountainBG', mountainBG)
-    this.load.image('mountainFar', mountainFar)
-    this.load.image('mountains', mountains)
-    this.load.image('mountainTrees', mountainTrees)
-    this.load.image('mountainFGTrees', mountainFGTrees)
-
+    loadBackgroundImages(this)
     this.load.spritesheet('flippieStand', flippieStand, { frameWidth: 32, frameHeight: 32, endFrame: 6 })
   },
   create: function() {
@@ -58,7 +38,7 @@ export default new Phaser.Class({
     } else {
       this.result = `Your score was ${this.lastScore}. Keep trying!`
     }
-    this.add.text(gameOptions.gameWidth / 2 - 133, gameOptions.gameHeight / 2 + 20, `${this.result}\n        Press space to restart.        `, textConfig)
+    this.add.text(gameOptions.gameWidth / 2 - 133, gameOptions.gameHeight / 2 + 20, `${this.result}\n        Press space to restart.        `, centerTextConfig)
   },
   update: function () {
     if (cursors.space.isDown) {
@@ -66,55 +46,17 @@ export default new Phaser.Class({
     }
   },
   addBackground: function(){
-    this.mountainsBack = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainBG'
-    )
-    this.mountainsBack.tileScaleX=2
-    this.mountainsBack.tileScaleY=2
+    this.mountainsBack = addBackgroundSprite(this, 'mountainBG')
+    this.mountainsMid3 = addBackgroundSprite(this, 'mountainFar')
+    this.mountainsMid2 = addBackgroundSprite(this, 'mountains')
+    this.mountainsMid1 = addBackgroundSprite(this, 'mountainTrees')
+    this.mountainsFront = addBackgroundSprite(this, 'mountainFGTrees')
 
-    this.mountainsMid3 = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainFar'
-    )
-    this.mountainsMid3.tileScaleX=2
-    this.mountainsMid3.tileScaleY=2
-
-    this.mountainsMid2 = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountains'
-    )
-    this.mountainsMid2.tileScaleX=2
-    this.mountainsMid2.tileScaleY=2
-
-    this.mountainsMid1 = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainTrees'
-    )
-    this.mountainsMid1.tileScaleX=2
-    this.mountainsMid1.tileScaleY=2
-
-    this.mountainsFront = this.add.tileSprite(
-      gameOptions.gameWidth/2,
-      gameOptions.gameHeight/2,
-      gameOptions.gameWidth,
-      gameOptions.gameHeight,
-      'mountainFGTrees'
-    )
-    this.mountainsFront.tileScaleX=2
-    this.mountainsFront.tileScaleY=2
+    scaleSprite(this.mountainsBack, 2)
+    scaleSprite(this.mountainsMid3, 2)
+    scaleSprite(this.mountainsMid2, 2)
+    scaleSprite(this.mountainsMid1, 2)
+    scaleSprite(this.mountainsFront, 2)
   },
   loadStandingFlippie: function(){
     this.anims.create({

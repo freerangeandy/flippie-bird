@@ -4,7 +4,7 @@ import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
 import gem from "../assets/gem-type3-red.png"
 import { gameOptions, textConfig } from "../constants"
-import { loadBackgroundImages, addBackgroundSprite, scaleSprite } from "../utils"
+import { loadBackgroundImages, addBackgroundSprite, scaleSprite, getRandomNum } from "../utils"
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -64,16 +64,12 @@ export default new Phaser.Class({
         this.logPool.push(log)
         if(this.logPool.length == 2){
           this.placeLogs(true)
-          if (this.getRandomNum(3)){
+          if (getRandomNum(3)){
             this.placeGem()
           }
         }
       }
     }, this)
-  },
-  getRandomNum: function(sampleSize) {
-    const value = Phaser.Math.Between(0, sampleSize)
-    return value <= 1
   },
   collectGem: function(bird, gem) {
     gem.disableBody(true, true)
@@ -156,7 +152,7 @@ export default new Phaser.Class({
   flap: function(){
     const flipFactor = this.isFlipped ? -1 : 1
     this.bird.body.velocity.y = -flipFactor * gameOptions.birdFlapPower
-    this.bird.angle = flipFactor * gameOptions.birdAngle    
+    this.bird.angle = flipFactor * gameOptions.birdAngle
     this.bird.anims.play('flap', true)
   },
   getRightmostLog: function (){

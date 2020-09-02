@@ -1,3 +1,5 @@
+import Phaser from "phaser"
+
 import mountainBG from "./assets/parallax-mountain-bg.png"
 import mountainFar from "./assets/parallax-mountain-montain-far.png"
 import mountains from "./assets/parallax-mountain-mountains.png"
@@ -28,8 +30,14 @@ function scaleSprite(sprite, factor) {
   sprite.tileScaleY=factor
 }
 
+function getRandomNum(sampleSize) {
+  const value = Phaser.Math.Between(0, sampleSize)
+  return value <= 1
+}
+
 export {
   loadBackgroundImages,
   addBackgroundSprite,
-  scaleSprite
+  scaleSprite,
+  getRandomNum
 }

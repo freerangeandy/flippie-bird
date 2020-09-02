@@ -6,19 +6,14 @@ const headerConfig = {
   strokeThickness: '2'
 }
 
-const instructionsConfig = {
-  fontFamily: 'Verdana, sans-serif',
-  color: '#fff7e2',
-}
-
 const textConfig = {
-  ...instructionsConfig,
-  align: "center"
-}
-
-const scoresConfig = {
   fontFamily: 'Verdana, sans-serif',
   color: '#fff7e2',
+}
+
+const centerTextConfig = {
+  ...textConfig,
+  align: "center"
 }
 
 const gameOptions = {
@@ -40,8 +35,7 @@ const gameOptions = {
 
 export {
   headerConfig,
-  instructionsConfig,
   textConfig,
-  scoresConfig,
+  centerTextConfig,
   gameOptions
 }

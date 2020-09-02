@@ -5,7 +5,7 @@ import mountainFar from "../assets/parallax-mountain-montain-far.png"
 import mountains from "../assets/parallax-mountain-mountains.png"
 import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
-import { gameOptions, headerConfig, instructionsConfig } from "../constants"
+import { gameOptions, headerConfig, textConfig } from "../constants"
 import { addBackgroundSprite, scaleSprite } from "../utils"
 
 let cursors
@@ -27,11 +27,11 @@ export default new Phaser.Class({
     cursors = this.input.keyboard.createCursorKeys()
 
     this.add.text(20, 20, 'Flippie Bird', headerConfig)
-    this.add.text(20, gameOptions.gameHeight / 2 + 20, "Press space to begin", instructionsConfig)
-    this.add.text(20, gameOptions.gameHeight / 2 + 40, "Click mouse button to flap", instructionsConfig)
-    this.add.text(20, gameOptions.gameHeight / 2 + 60, "Collect red gem to flip...", instructionsConfig)
+    this.add.text(20, gameOptions.gameHeight / 2 + 20, "Press space to begin", textConfig)
+    this.add.text(20, gameOptions.gameHeight / 2 + 40, "Click mouse button to flap", textConfig)
+    this.add.text(20, gameOptions.gameHeight / 2 + 60, "Collect red gem to flip...", textConfig)
     this.topScore = localStorage.getItem(gameOptions.localStorageBest) == null ? 0 : localStorage.getItem(gameOptions.localStorageBest)
-    this.add.text(20, gameOptions.gameHeight - 30, 'Best Score: ' + this.topScore, instructionsConfig)
+    this.add.text(20, gameOptions.gameHeight - 30, 'Best Score: ' + this.topScore, textConfig)
   },
   update: function () {
     this.backgroundParallax()

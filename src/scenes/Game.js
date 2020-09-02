@@ -8,7 +8,7 @@ import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
 import gem from "../assets/gem-type3-red.png"
-import { gameOptions, scoresConfig } from "../constants"
+import { gameOptions, textConfig } from "../constants"
 import { addBackgroundSprite, scaleSprite } from "../utils"
 
 export default new Phaser.Class({
@@ -58,7 +58,7 @@ export default new Phaser.Class({
 
     this.input.on('pointerdown', this.flap, this)
     this.topScore = localStorage.getItem(gameOptions.localStorageBest) == null ? 0 : localStorage.getItem(gameOptions.localStorageBest)
-    this.scoreText = this.add.text(10, 10, '', scoresConfig)
+    this.scoreText = this.add.text(10, 10, '', textConfig)
     this.updateScore(this.score)
   },
   update: function () {

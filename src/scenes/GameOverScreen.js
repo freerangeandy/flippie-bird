@@ -6,7 +6,7 @@ import mountains from "../assets/parallax-mountain-mountains.png"
 import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippieStand from "../assets/flyingbird.png"
-import { gameOptions, headerConfig, textConfig } from "../constants"
+import { gameOptions, headerConfig, centerTextConfig } from "../constants"
 import { addBackgroundSprite, scaleSprite } from "../utils"
 
 let graphics
@@ -48,7 +48,7 @@ export default new Phaser.Class({
     } else {
       this.result = `Your score was ${this.lastScore}. Keep trying!`
     }
-    this.add.text(gameOptions.gameWidth / 2 - 133, gameOptions.gameHeight / 2 + 20, `${this.result}\n        Press space to restart.        `, textConfig)
+    this.add.text(gameOptions.gameWidth / 2 - 133, gameOptions.gameHeight / 2 + 20, `${this.result}\n        Press space to restart.        `, centerTextConfig)
   },
   update: function () {
     if (cursors.space.isDown) {

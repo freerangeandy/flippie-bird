@@ -154,13 +154,9 @@ export default new Phaser.Class({
     gem.scaleY = gem.scaleX
   },
   flap: function(){
-    if (this.isFlipped) {
-      this.bird.body.velocity.y = gameOptions.birdFlapPower
-      this.bird.angle = -gameOptions.birdAngle
-    } else {
-      this.bird.body.velocity.y = -gameOptions.birdFlapPower
-      this.bird.angle = gameOptions.birdAngle
-    }
+    const flipFactor = this.isFlipped ? -1 : 1
+    this.bird.body.velocity.y = -flipFactor * gameOptions.birdFlapPower
+    this.bird.angle = flipFactor * gameOptions.birdAngle    
     this.bird.anims.play('flap', true)
   },
   getRightmostLog: function (){

@@ -8,13 +8,8 @@ import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippie from "../assets/flyingbird.png"
 import log from "../assets/one-log.png"
 import gem from "../assets/gem-type3-red.png"
-import { gameOptions } from "../constants"
+import { gameOptions, scoresConfig } from "../constants"
 import { addBackgroundSprite, scaleSprite } from "../utils"
-
-const scoresConfig = {
-  fontFamily: 'Verdana, sans-serif',
-  color: '#fff7e2',
-}
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,

@@ -1,6 +1,6 @@
 import { gameOptions } from "./constants"
 
-export function addBackgroundSprite(game, spriteName){
+function addBackgroundSprite(game, spriteName){
   return game.add.tileSprite(
     gameOptions.gameWidth/2,
     gameOptions.gameHeight/2,
@@ -10,7 +10,12 @@ export function addBackgroundSprite(game, spriteName){
   )
 }
 
-export function scaleSprite(sprite, factor) {
+function scaleSprite(sprite, factor) {
   sprite.tileScaleX=factor
   sprite.tileScaleY=factor
+}
+
+export {
+  addBackgroundSprite,
+  scaleSprite
 }

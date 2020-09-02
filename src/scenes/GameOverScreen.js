@@ -6,23 +6,11 @@ import mountains from "../assets/parallax-mountain-mountains.png"
 import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
 import flippieStand from "../assets/flyingbird.png"
-import { gameOptions } from "../constants"
+import { gameOptions, headerConfig, textConfig } from "../constants"
 import { addBackgroundSprite, scaleSprite } from "../utils"
 
 let graphics
 let cursors
-const headerConfig = {
-  fontFamily: 'Palatino, serif',
-  fontSize: '48px',
-  color: '#28a4f7',
-  stroke: '#fff7e2',
-  strokeThickness: '2'
-}
-const textConfig = {
-  fontFamily: 'Verdana, sans-serif',
-  color: '#fff7e2',
-  align: "center"
-}
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,

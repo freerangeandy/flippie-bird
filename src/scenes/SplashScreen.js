@@ -5,21 +5,10 @@ import mountainFar from "../assets/parallax-mountain-montain-far.png"
 import mountains from "../assets/parallax-mountain-mountains.png"
 import mountainTrees from "../assets/parallax-mountain-trees.png"
 import mountainFGTrees from "../assets/parallax-mountain-foreground-trees.png"
-import { gameOptions } from "../constants"
+import { gameOptions, headerConfig, instructionsConfig } from "../constants"
 import { addBackgroundSprite, scaleSprite } from "../utils"
 
 let cursors
-const titleConfig = {
-  fontFamily: 'Palatino, serif',
-  fontSize: '48px',
-  color: '#28a4f7',
-  stroke: '#fff7e2',
-  strokeThickness: '2'
-}
-const instructionsConfig = {
-  fontFamily: 'Verdana, sans-serif',
-  color: '#fff7e2',
-}
 
 export default new Phaser.Class({
   Extends: Phaser.Scene,
@@ -37,7 +26,7 @@ export default new Phaser.Class({
     this.addBackground()
     cursors = this.input.keyboard.createCursorKeys()
 
-    this.add.text(20, 20, 'Flippie Bird', titleConfig)
+    this.add.text(20, 20, 'Flippie Bird', headerConfig)
     this.add.text(20, gameOptions.gameHeight / 2 + 20, "Press space to begin", instructionsConfig)
     this.add.text(20, gameOptions.gameHeight / 2 + 40, "Click mouse button to flap", instructionsConfig)
     this.add.text(20, gameOptions.gameHeight / 2 + 60, "Collect red gem to flip...", instructionsConfig)
@@ -56,7 +45,7 @@ export default new Phaser.Class({
     this.mountainsMid2 = addBackgroundSprite(this, 'mountains')
     this.mountainsMid1 = addBackgroundSprite(this, 'mountainTrees')
     this.mountainsFront = addBackgroundSprite(this, 'mountainFGTrees')
-    
+
     scaleSprite(this.mountainsBack, 2)
     scaleSprite(this.mountainsMid3, 2)
     scaleSprite(this.mountainsMid2, 2)
